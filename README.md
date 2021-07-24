@@ -1,23 +1,23 @@
 ﻿<!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <a href="https://github.com/JohanScheepers/TTN_Gateway_Node">
+  <a href="https://github.com/JohanScheepers/TTN-Node-Red-Decoder">
     <img src="images/SIGNALOWL.jpg" alt="Logo" width="160" height="80">
   </a>
 
-  <h3 align="center">TTN Gateway Radius and New Node</h3>
+  <h3 align="center"> TTN-Node-Red-Decoder </h3>
 
   <p align="center">
-    Project is aimed to use the TTN API to plot gateways and location of potencial new node on map
+    Project is aimed to use the Node-Red to decode TTN raw data
     <br />
-    <a href="https://github.com/JohanScheepers/TTN_Gateway_Node"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/JohanScheepers/TTN-Node-Red-Decoder"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/JohanScheepers/TTN_Gateway_Node/blob/main/images/gatewayRadius.gif">View Demo</a>
+    <a href="https://github.com/JohanScheepers/TTN-Node-Red-Decoder/blob/main/images/gatewayRadius.gif">View Demo</a>
     ·
-    <a href="https://github.com/JohanScheepers/TTN_Gateway_Node/issues">Report Bug</a>
+    <a href="https://github.com/JohanScheepers/TTN-Node-Red-Decoder/issues">Report Bug</a>
     ·
-    <a href="https://github.com/JohanScheepers/TTN_Gateway_Node/issues">Request Feature</a>
+    <a href="https://github.com/JohanScheepers/TTN-Node-Red-Decoder/issues">Request Feature</a>
   </p>
 </p>
 
@@ -40,16 +40,7 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li>
-	<a href="#usage">Usage</a>
-	<ul>
-        <li><a href="#gateway-within-radius">Gateway within Radius</a></li>
-        <li><a href="#radius-around-gateway">Radius around Gateway</a></li>
-        <li><a href="#plot-new-node">Plot New Node</a></li>
-        <li><a href="#demo">Demo</a></li>
-        <li><a href="#flow">Flow</a></li>
-      </ul>
-    </li> 
+    <li><a href="#usage">Usage</a></li> 
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -61,20 +52,15 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-In this project we are going to call on two TTN API. Namely the <a href="https://mapper.packetbroker.net/api/v2/gateways?distanceWithin[latitude]=52.3676&distanceWithin[longitude]=4.9041&distanceWithin[distance]=7500&netID=000013&tenantID=ttn">TTN Radius API</a> to get the gateways within a certain radius form a GPS coordinate and the <a href="https://mapper.packetbroker.net/api/v2/gateways/netID=000013,tenantID=ttn,id=bb1st-jansmuts-1">TTN Gateway API</a> to get gateway specific data. These two API will plot the gateway on the map, including their status information. Bear in mind these API are rate limited.
+In this project we are going to explore how to decode raw data from The Things Stack Community Edition applications we have created. In this example we cannot use the decoder in The Things Stack Community Edition as the decoder is larger than 4k, but you can use this on any size decoder.
 
 
-
-`TTN_Gateway_Node`
+` TTN Node Red Decoder`
 
 
 ### Built With
 
 * []()Node-Red
-* []()node-red-dashboard
-* []()node-red-contrib-web-worldmap
-* []()TTN API
-
 
 
 
@@ -85,6 +71,7 @@ To get a local copy up and running follow these simple steps.
 
 ### Prerequisites
 
+This is an example of how to list things you need to use the software and how to install them.
 * Node-Red
   ```sh
   https://nodered.org/docs/getting-started/
@@ -105,23 +92,10 @@ To get a local copy up and running follow these simple steps.
 
 ### Installation
 
-1. Install Node-Red following the relevant getting started guide for your operating system form the official website
+ Install Node-Red following the relevant getting started guide for your operating system form the official website
    ```sh
    https://nodered.org/docs/getting-started/
    ```
-2. Install npm  package node-red-dashboard
-   ```sh
-   npm install node-red-dashboard
-   ```
-3. Install npm  node-red-contrib-web-worldmap
-   ```sh
-   npm install node-red-contrib-web-worldmap
-   ```
-4. Install the Node-Red flow
-   ```sh
-   https://github.com/JohanScheepers/TTN_Gateway_Node/blob/master/flow/TTN_Gateway_Radius.json
-   ```
-
 
 
 
@@ -129,40 +103,36 @@ To get a local copy up and running follow these simple steps.
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-There are three user interfacing areas, Gateway within Radius, Radius around Gateway and Plot New Node.
+I have some Abeeway Smart barges and micro trackers, the decoder for them are more the 4k so you can’t utilize the decoder on the “The Things Stack Community Edition”, here I am going to use Node-Red to decode the raw data for me. In the same way you can use the decoder for both small and large packet decoders.
 
-### Gateway within Radius
+1. Create your application in TTN, add you device to the application. 
+<img src="images/image1.png" alt="Logo" width="160" height="80">
+2. In the integration add MQTT , copy your “Public TLS address”, “Username” and “Generate new API key”
+<img src="images/image2.png" alt="Logo" width="160" height="80">
 
-Here the user have three fields to complete, Latitude dec, Longitude dec and Distance KM, once these are completed the ‘Get’ is used. This calls on the TTN Radius API to get all the Gateways within the specified radius from the coordinates supplied. The Latitude dec, Longitude dec are in decimal format and Distance KM is in kilometres.
+3. Head over to  your Node-Red instance and add a MQTT node to your flow, set up using https://www.thethingsnetwork.org/forum/t/mqtt-in-node-red-howto/39909
+4. Add a “function” node and some “debug” nodes (these are just for debug purposes) and wire the lot together. I have an additional “inject” node just to simulate the JSON from TTN. 
+<img src="images/image3.png" alt="Logo" width="160" height="80">
 
-This in turn calls on the TTN Gateway API that returns data more specific to the gateway. This triggers a flow that map the gateways on a map.
+5. In the “inject” node (Simulate mqtt from TTN) you can past the below (remember this is the JSON from TTN for an Abeeway tracker) in the msg.payload, you also need to change the payload type to JSON. The structure from TTN are the same for all nodes. And then select “Done”. ``` {"topic":"v3/smart-badge@ttn/devices/sotracking-abeeway-smartbadge-1/up","payload":{"end_device_ids":{"device_id":"sotracking-abeeway-smartbadge-1","application_ids":{"application_id":"smart-badge"},"dev_eui":"ttnPacketSim","join_eui":"ttnPacketSim2","dev_addr":"ttnPacketSim3"},"correlation_ids":["as:up:01FATZDBM2VGCRW537A405259N","gs:conn:01FAT7G51B7H8S9T0QEVGGD3BA","gs:up:host:01FAT7G51H1EMBX5QSFCMJR05S","gs:uplink:01FATZDBD5TRMD7VMF7BMJKDY6","ns:uplink:01FATZDBDK2H1BA0WPZTW3C5B1","rpc:/ttn.lorawan.v3.GsNs/HandleUplink:01FATZDBDK6RVCXGG0J440347E","rpc:/ttn.lorawan.v3.NsAs/HandleUplink:01FATZDBM2EFSJX03FHV7F3E97"],"received_at":"2021-07-17T19:34:40.516171594Z","uplink_message":{"session_key_id":"AXpDcMNiQiGwLWFsBx2pYQ==","f_port":18,"f_cnt":2292,"frm_payload":"BSAUeKBAAgEBAwIC","rx_metadata":[{"gateway_ids":{"gateway_id":"on-the-hill-01","eui":"00800000A000104F"},"timestamp":4101298211,"rssi":-65,"channel_rssi":-65,"snr":10.2,"location":{"latitude":-29.79981320234865,"longitude":30.762821694859166,"source":"SOURCE_REGISTRY"},"uplink_token":"ChwKGgoOb24tdGhlLWhpbGwtMDESCACAAACgABBPEKOw06MPGgwI0OHMhwYQnuz1hgEguJGxw67oBQ==","channel_index":3}],"settings":{"data_rate":{"lora":{"bandwidth":125000,"spreading_factor":7}},"data_rate_index":5,"coding_rate":"4/5","frequency":"867100000","timestamp":4101298211},"received_at":"2021-07-17T19:34:40.307703855Z","consumed_airtime":"0.066816s","version_ids":{"brand_id":"abeeway","model_id":"abeeway-smart-badge","hardware_version":"1.0","firmware_version":"2.1","band_id":"EU_863_870"}}},"qos":0,"retain":false,"_msgid":"cb67353f.d8bfa8"} ```
+ <img src="images/image4.png" alt="Logo" width="160" height="80">
 
-There are several fields of data about the gateway, we are only going  to display the following fields in tables, name, eui, latitude, longitude, rxRate, txRate, updateAt and online.
+6. In the “function” node, change the name to “Decoder - Abeeway Tracker” and past the bellow in the “On Message” tab. ``` let bytes = Buffer.from(msg.payload.uplink_message.frm_payload)
 
-There are two tables, Gateway Status Offline and Gateway Status Online. These tables display all the offline and online gateways, each field is selectable. If the field is selected the map zooms to that specific gateway.
+let decoded = context.Decoder(bytes, msg.payload.uplink_message.f_port)
+msg.payload.uplink_message.decoded_payload = decoded
+return msg``` 
+<img src="images/image5.png" alt="Logo" width="160" height="80">
+7. In the “On Start” tab is where we are pasting our “decoder” (replace with you own decoder for other applications, remember this is for Abeeway and only will work with them) , for the Abeeway is the code below and select done and we can “deploy” the flow ``` abeeway code``` 
+<img src="images/image6.png" alt="Logo" width="160" height="80">
+8. No if we press the button on the “” your test JSON is injected and you date is decoded. 
+<img src="images/image7.png" alt="Logo" width="160" height="80">
+9. If you receive an Uplink from you Abeeway tracker it will also be decoded.
+10. The raw data resides in “msg.payload.uplink_message.frm_payload “
+<img src="images/image8.png" alt="Logo" width="160" height="80">
 
-### Radius around Gateway
-
-Here we can set four different radiuses plotted around the gateways, this in in kilometres. Complete the distance and the radius will be plotted on the map.
-
-The clear these radiuses, either select CLEAR RADIUS or change the field value to 0.
-
-### Plot New Node
-
-Here we set the Latitude dec, Longitude dec and the Distance KM. The fields Latitude dec, Longitude dec are in in decimal format and Distance KM are in kilometres.
-
-You simply complete the coordinates and the point will be plotted on the map. If you require a radius drawn around the point you complete the Distance KM.
-
-The delete the point from the map you press the DELETE button
-
-### Demo
- 
-<img src="images/gatewayRadius.gif" alt="Demo" width="900" height="450">
-
-
-### Flow
-
-<img src="images/flow.png" alt="Demo" width="900" height="450">
+11. Your decode data resides in “msg.payload.uplink_message.decoded_payload” 
+<img src="images/image9.png" alt="Logo" width="160" height="80">
 
 
 
@@ -170,7 +140,7 @@ The delete the point from the map you press the DELETE button
 <!-- ROADMAP -->
 ## Roadmap
 
-See the [open issues](https://github.com/JohanScheepers/TTN_Gateway_Node/issues) for a list of proposed features (and known issues).
+See the [open issues](https://github.com/JohanScheepers/TTN-Node-Red-Decoder/issues) for a list of proposed features (and known issues).
 
 
 
@@ -185,7 +155,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 ## Contact
 
 
-Project Link: [https://github.com/JohanScheepers/ TTN_Gateway_Node](https://github.com/JohanScheepers/TTN_Gateway_Node)
+Project Link: [https://github.com/JohanScheepers/TTN-Node-Red-Decoder](https://github.com/JohanScheepers/TTN-Node-Red-Decoder)
 
 
 
@@ -198,10 +168,11 @@ Project Link: [https://github.com/JohanScheepers/ TTN_Gateway_Node](https://gith
 [forks-shield]: https://img.shields.io/github/forks/JohanScheepers/repo.svg?style=for-the-badge
 [forks-url]: https://github.com/JohanScheepers/repo/network/members
 [stars-shield]: https://img.shields.io/github/stars/JohanScheepers/repo.svg?style=for-the-badge
-[stars-url]:https://github.com/JohanScheepers/TTN_Gateway_Node/stargazers
+[stars-url]:https://github.com/JohanScheepers/TTN-Node-Red-Decoder/stargazers
 [issues-shield]: https://img.shields.io/github/issues/JohanScheepers/repo.svg?style=for-the-badge
 [issues-url]: https://github.com/JohanScheepers/repo/issues
 [license-shield]: https://img.shields.io/github/license/JohanScheepers/repo.svg?style=for-the-badge
 [license-url]: https://github.com/JohanScheepers/repo/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/johan-scheepers-6a263514a/
+
