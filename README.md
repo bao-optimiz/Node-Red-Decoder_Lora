@@ -5,10 +5,10 @@
     <img src="images/SIGNALOWL.jpg" alt="Logo" width="160" height="80">
   </a>
 
-  <h3 align="center">TTN Gateway Radius and New Node</h3>
+  <h3 align="center"> TTN-Node-Red-Decoder </h3>
 
   <p align="center">
-    Project is aimed to use the TTN API to plot gateways and location of potencial new node on map
+    Project is aimed to use the Node-Red to decode TTN raw data
     <br />
     <a href="https://github.com/JohanScheepers/TTN-Node-Red-Decoder"><strong>Explore the docs »</strong></a>
     <br />
