@@ -141,7 +141,7 @@ abeeway code
 
 <img src="images/image8.png" alt="Logo" width="450" height="150">
 
-11. Your decode data resides in “msg.payload.uplink_message.decoded_payload” \
+11. Your decode data resides in “msg.payload.uplink_message.decoded_payload”
 
 <img src="images/image9.png" alt="Logo" width="450" height="150">
 
